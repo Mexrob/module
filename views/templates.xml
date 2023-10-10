@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="product_price" inherit_id="website_sale.product_price">
+        <xpath expr="//div[@id='product_unavailable']" position="after">
+            <div itemprop="offers" itemscope="itemscope" class="mt-2 mb-3 d-inline-block" style="width:22%;margin-left:10px;">
+                <input id="alto" min="1" placeholder="Alto mm" type="number" class="form-control s_website_form_input" name="alto"/>
+            </div>
+            x
+            <div itemprop="offers" itemscope="itemscope" class="mt-2 mb-3 d-inline-block" style="width:22%; margin-left:5px;">
+                <input id="ancho" min="1" placeholder="Ancho mm" type="number" class="form-control s_website_form_input" name="ancho"/>
+            </div> mm.
+        </xpath>
+        <xpath expr="//span[hasclass('oe_price')]" position="replace">
+            <span t-if="combination_info['price']>10" class="oe_price" style="white-space: nowrap;" t-esc="combination_info['price']"
+                  t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+            <span t-if="combination_info['price']&lt;10" class="oe_price" style="white-space: nowrap;" t-esc="0.0"
+                  t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+        </xpath>
+    </template>
+
+    <template id="cart_lines" inherit_id="website_sale.cart_lines">
+        <xpath expr="//table[@id='cart_products']//thead//th[hasclass('td-price')]" position="before">
+            <th class="text-center">Medidas</th>
+        </xpath>
+        <xpath expr="//table[@id='cart_products']//tbody//td[hasclass('td-price')]" position="before">
+            <td class="text-center">
+                <span t-esc="line.medidas"/>
+            </td>
+        </xpath>
+    </template>
+
+    <template id="confirmation" inherit_id="website_sale.confirmation">
+        <xpath expr="//div[hasclass('container')]/h1" position="replace">
+            <h1><a t-att-href="order.get_portal_url()" target="_blank">
+                <span>Order</span>
+                <em t-field="order.name" />
+                <t t-if="order.state == 'sale'"><span>Confirmed</span></t>
+                <i class="fa fa-external-link" style="font-size:initial;position:relative;top:-30px;"/>
+            </a></h1>
+        </xpath>
+    </template>
+
+</odoo>
